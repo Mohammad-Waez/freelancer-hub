@@ -3,7 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import {
   CurrentUser,
-  LoginRateLimit,
+
   Public,
   ResponseMessage,
 } from '../common/decorators/index.js';
@@ -14,7 +14,7 @@ import { AuthService } from './auth.service.js';
 import { LoginDto } from './dto/login.dto.js';
 import { RefreshTokenDto } from './dto/refresh-token.dto.js';
 import { RegisterDto } from './dto/register.dto.js';
-
+import { LoginRateLimit } from '../common/decorators/login-rate-limit.decorator.js';
 @ApiTags('Auth: الحسابات')
 @Controller('auth')
 export class AuthController {

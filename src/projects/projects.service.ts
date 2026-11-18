@@ -220,7 +220,6 @@ export class ProjectsService {
     }
   }
 
-
   /**
    * The client cancels a LATE project and gets the held money back.
    * Allowed only after the deadline + the grace period, and only when
@@ -279,8 +278,6 @@ export class ProjectsService {
       };
     });
   }
-
-
 
   // ---------------------------------------------------------------
 

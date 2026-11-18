@@ -1,4 +1,3 @@
-
 import {
   CurrentUser,
   ResponseMessage,
@@ -13,8 +12,17 @@ import { UpdateProjectDto } from './dto/update-project.dto.js';
 import { ProjectsService } from './projects.service.js';
 import { Role } from '../generated/prisma/client.js';
 import {
-  Controller, Get, Post, Patch, Delete, Body, Param, ParseIntPipe, Query,
-  UploadedFile, UseInterceptors,
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Body,
+  Param,
+  ParseIntPipe,
+  Query,
+  UploadedFile,
+  UseInterceptors,
   HttpCode,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -26,16 +34,12 @@ import { ApiTags } from '@nestjs/swagger';
 import { ApiDoc } from '../common/swagger/api-doc.decorator.js';
 import { EX } from '../common/swagger/examples.js';
 
-
 @ApiTags('Projects: المشاريع')
 @Controller('projects')
 export class ProjectsController {
   constructor(private readonly projects: ProjectsService) {}
 
-
-
-
-    @ApiDoc({
+  @ApiDoc({
     summary: 'نشر مشروع (للعميل)',
     description:
       'ينشر مشروعاً بحالة `OPEN`. يقبل JSON عادياً أو `multipart/form-data` إن كان فيه مرفق.\n\n' +
@@ -49,7 +53,10 @@ export class ProjectsController {
         categoryId: 3,
         budget: 250,
       },
-      file: { name: 'attachment', description: 'مرفق اختياري (صورة أو PDF حتى 5MB)' },
+      file: {
+        name: 'attachment',
+        description: 'مرفق اختياري (صورة أو PDF حتى 5MB)',
+      },
     },
     ok: { status: 201, message: 'Project created', data: EX.project },
     errors: [400, 403, 413],
@@ -76,14 +83,23 @@ export class ProjectsController {
   @Get()
   @Roles(Role.FREELANCER)
   @ResponseMessage('Projects fetched')
-    @ApiDoc({
+  @ApiDoc({
     summary: 'تصفح المشاريع المفتوحة (للمستقل)',
-    description: 'المشاريع **المفتوحة فقط**، بترقيم صفحات. المشروع الذي قُبل عرضه يخرج من هذه القائمة.',
+    description:
+      'المشاريع **المفتوحة فقط**، بترقيم صفحات. المشروع الذي قُبل عرضه يخرج من هذه القائمة.',
     query: [
       { name: 'page', description: 'رقم الصفحة (الافتراضي 1)', example: 1 },
-      { name: 'limit', description: 'عدد العناصر (الافتراضي 10، الأقصى 50)', example: 10 },
+      {
+        name: 'limit',
+        description: 'عدد العناصر (الافتراضي 10، الأقصى 50)',
+        example: 10,
+      },
       { name: 'categoryId', description: 'تصفية بالتصنيف', example: 3 },
-      { name: 'q', description: 'كلمة في العنوان (لا تهم حالة الأحرف)', example: 'logo' },
+      {
+        name: 'q',
+        description: 'كلمة في العنوان (لا تهم حالة الأحرف)',
+        example: 'logo',
+      },
       {
         name: 'sort',
         description: 'الترتيب (الافتراضي newest)',
@@ -101,7 +117,7 @@ export class ProjectsController {
   @Get('mine')
   @Roles(Role.CLIENT)
   @ResponseMessage('Your projects fetched')
-    @ApiDoc({
+  @ApiDoc({
     summary: 'مشاريعي (للعميل)',
     description: 'مشاريع العميل نفسه بكل حالاتها، الأحدث أولاً.',
     query: [
@@ -125,7 +141,7 @@ export class ProjectsController {
 
   @Get(':id')
   @ResponseMessage('Project fetched')
-    @ApiDoc({
+  @ApiDoc({
     summary: 'تفاصيل مشروع',
     description:
       '**من يراه:** المدير وصاحب المشروع دائماً، والمستقل إن كان المشروع مفتوحاً أو كان صاحب العرض المقبول. غير ذلك: **404** (لا 403) كي لا يُكشف وجود المعرّفات.\n\n' +
@@ -161,7 +177,7 @@ export class ProjectsController {
     }),
   )
   @ResponseMessage('Project updated')
-    @ApiDoc({
+  @ApiDoc({
     summary: 'تعديل مشروع (للعميل صاحبه)',
     description:
       'يعدّل ما ترسله فقط. **ما دام المشروع `OPEN` فقط.**\n\n' +
@@ -173,7 +189,10 @@ export class ProjectsController {
       fields: { title: 'Logo design for my coffee shop', budget: 300 },
       file: { name: 'attachment', description: 'مرفق جديد (اختياري)' },
     },
-    ok: { message: 'Project updated', data: { ...EX.project, budget: '300.00' } },
+    ok: {
+      message: 'Project updated',
+      data: { ...EX.project, budget: '300.00' },
+    },
     errors: [400, 403, 404, [409, 'Only open projects can be modified'], 413],
   })
   update(
@@ -188,7 +207,7 @@ export class ProjectsController {
   @Delete(':id')
   @Roles(Role.CLIENT)
   @ResponseMessage('Project deleted')
-    @ApiDoc({
+  @ApiDoc({
     summary: 'حذف مشروع (للعميل صاحبه)',
     description: 'يحذف المشروع **وعروضه ومرفقه**، ما دام `OPEN` فقط.',
     ok: { message: 'Project deleted', data: null },
@@ -202,13 +221,11 @@ export class ProjectsController {
     return null;
   }
 
-
-
   @Post(':id/cancel')
   @Roles(Role.CLIENT)
   @HttpCode(200)
   @ResponseMessage('Project cancelled and the held amount refunded')
-    @ApiDoc({
+  @ApiDoc({
     summary: 'إلغاء مشروع متأخر واسترداد المال (للعميل)',
     description:
       'يُلغي العميل مشروعاً **قيد التنفيذ تأخر فيه المستقل** ويسترد المبلغ المحجوز كاملاً (`REFUND`)، في معاملة واحدة.\n\n' +
@@ -219,7 +236,11 @@ export class ProjectsController {
       message: 'Project cancelled and the held amount refunded',
       data: { project: { id: 12, status: 'CANCELLED' }, refunded: '200.00' },
     },
-    errors: [403, 404, [409, 'You can cancel only after 2026-11-25T11:00:00.000Z']],
+    errors: [
+      403,
+      404,
+      [409, 'You can cancel only after 2026-11-25T11:00:00.000Z'],
+    ],
   })
   cancel(
     @Param('id', ParseIntPipe) id: number,
@@ -227,5 +248,4 @@ export class ProjectsController {
   ) {
     return this.projects.cancelByOwner(id, userId);
   }
-
 }
