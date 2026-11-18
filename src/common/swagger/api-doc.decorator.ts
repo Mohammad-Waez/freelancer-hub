@@ -47,6 +47,7 @@ const ERROR_TITLES: Record<number, string> = {
   409: 'تعارض مع حالة النظام',
   413: 'الملف أكبر من الحد المسموح',
   429: 'تجاوزت حد الطلبات',
+  503: 'الخدمة غير متاحة (قاعدة البيانات لا تستجيب)',
 };
 
 const ERROR_MESSAGES: Record<number, string> = {
@@ -57,6 +58,7 @@ const ERROR_MESSAGES: Record<number, string> = {
   409: 'Conflict with the current state',
   413: 'File is too large',
   429: 'Too many requests, please try again later',
+  503: 'Database is not reachable',
 };
 
 // the schema types of Swagger are very strict: examples are plain objects

@@ -96,7 +96,7 @@ export class TokenService {
   }
 
   /** Revokes one refresh token. Silent if it does not exist. */
-  async revoke(rawToken: string) {
+  async   revoke(rawToken: string) {
     await this.prisma.refreshToken.updateMany({
       where: { tokenHash: sha256(rawToken), revokedAt: null },
       data: { revokedAt: new Date() },

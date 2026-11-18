@@ -100,6 +100,12 @@ export class AuthService implements OnModuleInit {
   }
 
 
+  me(userId: number) {
+    return this.prisma.user.findUniqueOrThrow({
+      where: { id: userId },
+      select: publicUser,
+    });
+  }
 
     refresh(refreshToken: string) {
     return this.tokens.rotate(refreshToken);
@@ -109,12 +115,6 @@ export class AuthService implements OnModuleInit {
     return this.tokens.revoke(refreshToken);
   }
 
-  me(userId: number) {
-    return this.prisma.user.findUniqueOrThrow({
-      where: { id: userId },
-      select: publicUser,
-    });
-  }
   // SHA-256 first, so bcrypt's 72-byte limit never truncates long
   // or non-ASCII (e.g. Arabic) passwords
   private prehash(password: string) {

@@ -16,6 +16,7 @@ FreelanceHub: الخادم (Back-End)
 الأمان	helmet وCORS محدد وضغط الردود
 الملفات	Multer مع التحقق من محتوى الملف بـ file-type
 المهام المجدولة	@nestjs/schedule
+التوثيق التفاعلي	@nestjs/swagger (Swagger UI على /docs)
 الإعدادات	@nestjs/config مع التحقق عند الإقلاع بـ class-validator
 2. المتطلبات
 Node.js 22 أو أحدث (جُرّب على 24)
@@ -81,7 +82,7 @@ src/
   prisma/                PrismaModule (عام) وPrismaService
   platform/              يحدد محفظة المنصة عند الإقلاع
   storage/               حفظ الملفات والتحقق من نوعها
-  common/                decorators وguards وfilters وinterceptors وdto وutils
+  common/                decorators وguards وfilters وinterceptors وdto وutils وswagger (دالة التوثيق والأمثلة)
   auth/                  التسجيل والدخول والـ refresh
   wallet/ categories/ projects/ offers/ deliveries/ freelancers/ admin/ health/
   tasks/                 المهام المجدولة
@@ -90,25 +91,6 @@ docs/                    التوثيق (API وERD وخطة الاختبار وP
 
 الصورة في docs/erd.png، وهذا مخطط تقريبي:
 
-owns
-has (freelancers)
-owns (clients)
-submits (freelancers)
-sessions
-groups
-receives
-has
-linked to
-records
-USER
-WALLET
-FREELANCER_PROFILE
-PROJECT
-OFFER
-REFRESH_TOKEN
-CATEGORY
-DELIVERY
-TRANSACTION
 7. الأدوار
 الدور	يستطيع
 CLIENT صاحب مشروع	ينشر مشاريعه ويعدّلها ويحذفها وهي مفتوحة، ويرى عروضها، ويقبل عرضاً (فيُحجز المال)، ويوافق على التسليم أو يرفضه، ويشحن رصيده
@@ -182,9 +164,26 @@ json
 المال نصوص: "100.00".
 روابط الملفات نسبية: /uploads/...، والواجهة تضيف عنوان الخادم.
 الترقيم: ?page=1&limit=10 والأقصى 50.
-11. الطلبات (Endpoints)
+11. الطلبات (Endpoints) والتوثيق التفاعلي (Swagger)
+Swagger
 
-الشرح الكامل لكل طلب (المدخلات والقواعد والأخطاء) في docs/API.md.
+بعد تشغيل الخادم افتح:
+
+الرابط	ما فيه
+http://localhost:<PORT>/docs	صفحة Swagger UI: كل الطلبات مجمّعة بالميزة، مع الوصف والقواعد ومثال الجسم وأمثلة الردود والأخطاء، ويمكن تجربتها مباشرة
+http://localhost:<PORT>/docs-json	مواصفة OpenAPI بصيغة JSON (تُستورد في Postman أو تُعطى لمن يبني الواجهة)
+
+للتجربة داخل Swagger: نفّذ POST /auth/login، وانسخ accessToken، واضغط زر Authorize والصقه.
+
+التوثيق مكتوب في الكود نفسه (@ApiDoc فوق كل طلب في الـ controllers)، فيبقى بجانب ما يوثّقه.
+
+لحفظ المواصفة في ملف (للواجهة أو للتسليم):
+
+bash
+curl http://localhost:<PORT>/docs-json -o docs/openapi.json
+الجدول
+
+الشرح الكامل لكل طلب (المدخلات والقواعد والأخطاء) في Swagger وفي docs/API.md.
 
 الطلب	من يستعمله
 POST /auth/register	الجميع
@@ -217,7 +216,6 @@ GET /freelancers/:id	الجميع
 GET /admin/users	ADMIN
 POST /admin/users/:id/ban · POST /admin/users/:id/unban	ADMIN
 GET /admin/projects/blocked · POST /admin/projects/:id/cancel	ADMIN
-GET /health	الجميع
 GET /uploads/*	الجميع (الملفات العامة فقط)
 12. المهام المجدولة
 كل ساعة: الموافقة التلقائية على التسليمات المعلّقة منذ 3 أيام (ودفعها).
