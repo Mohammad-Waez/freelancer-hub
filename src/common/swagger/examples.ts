@@ -1,0 +1,53 @@
+// Example data used by the Swagger documentation
+export const EX = {
+  user: { id: 1, name: 'Sara', email: 'sara@test.com', role: 'CLIENT' },
+  tokens: {
+    accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+    refreshToken: 'q3v8Qm1c9Zk2Yx0w...',
+  },
+  category: { id: 3, name: 'Design' },
+  project: {
+    id: 12,
+    title: 'Logo design for my shop',
+    description: 'A detailed description of the work that is needed.',
+    budget: '250.00',
+    status: 'OPEN',
+    createdAt: '2026-11-16T09:30:00.000Z',
+    dueAt: null,
+    category: { id: 3, name: 'Design' },
+    owner: { id: 1, name: 'Sara' },
+    attachmentUrl: '/uploads/20261116-093000-a1b2c3d4.pdf',
+    isOverdue: false,
+    cancellableAt: null,
+  },
+  offer: {
+    id: 7,
+    projectId: 12,
+    price: '200.00',
+    durationDays: 7,
+    message: 'I can do this work well.',
+    status: 'PENDING',
+    createdAt: '2026-11-16T10:00:00.000Z',
+  },
+  delivery: {
+    id: 4,
+    projectId: 12,
+    status: 'PENDING',
+    clientNote: null,
+    createdAt: '2026-11-18T12:00:00.000Z',
+  },
+  transaction: {
+    id: 21,
+    type: 'HOLD',
+    amount: '-200.00',
+    projectId: 12,
+    createdAt: '2026-11-16T11:00:00.000Z',
+  },
+  profile: {
+    id: 5,
+    name: 'Ahmad',
+    bio: 'Graphic designer with 5 years of experience',
+    hourlyRate: '25.50',
+    photoUrl: '/uploads/20261110-083512-a1b2c3d4.png',
+  },
+};
